@@ -18,9 +18,9 @@ def main():
         # Total nodes = 1096, 1012 nodes for connected graph
         G = utils.create_graph(path, files)
         # utils.save_graph(G, "authors_graph")
-        utils.save_graph(G, "authors_connected_graph")
+        utils.save_graph(G, "graphs/authors_connected_graph")
     else:
-        G = utils.load_graph("authors_connected_graph")
+        G = utils.load_graph("graphs/authors_connected_graph")
 
     if run_find_MIS:
         iterations = 30
@@ -47,7 +47,7 @@ def main():
         # utils.create_subgraph(G, random_nodes, n_nodes_subgraph)
         # complement_graph = nx.complement(G)
 
-        complement_graph = utils.load_graph("compl_subgraph20")
+        complement_graph = utils.load_graph("graphs/compl_subgraph20")
 
         if run_find_MIS:
             print('')
