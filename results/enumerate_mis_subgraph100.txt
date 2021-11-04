@@ -1,0 +1,6 @@
+Run_enumerate_MIS: 
+Execution time nx = 0.09106874465942383 secs
+Execution time BK2 = 13.504229545593262 secs
+Execution time BK2_set = 789.880842924118 secs
+Execution time BKD = 18.559187412261963 secs
+Execution time BKD_set = 403.23591446876526 secs

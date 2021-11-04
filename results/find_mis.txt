@@ -1,0 +1,6 @@
+Run_find_MIS: 
+Average execution time nx_mis = 0.007006710000000001 secs
+Average execution time random_greedy_mis = 0.00670616333333333 secs
+Average execution time np_random_greedy_mis = 0.024920209999999998 secs
+Average execution time np_random_greedy_boolean_mask_mis = 0.07879650333333332 secs
+Average execution time fast_mis = 0.39285975333333334 secs
