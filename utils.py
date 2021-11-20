@@ -49,33 +49,27 @@ def create_graph(path, files):
                 names = np.empty(shape=0)
                 formula = js_file['results'][0]['formula']
                 for i in range(len(formula)):
-                    indices = ''
+                    formula_substring = ''
                     if formula[i].find(' _') != -1:
-                        authors = np.empty(shape=0)
+                        possible_authors = np.empty(shape=0)
                         if re.search(' _(.*)_', formula[i]):
-                            indices = formula[i][formula[i].find(' _') + len(' _'):formula[i].rfind('_')]
-                            if indices.find('_') != -1:
-                                split = indices.split('_')
+                            formula_substring = formula[i][formula[i].find(' _') + len(' _'):formula[i].rfind('_')]
+                            if formula_substring.find('_') != -1:
+                                split = formula_substring.split('_')
                                 # divide remaining strings
-                                authors = np.array([author for author in split if author.find(',') == -1])
-
+                                possible_authors = np.array([author for author in split if author.find(',') == -1])
                     # search for real authors
-                    real_authors = np.array([author for author in authors if find_authors(author)])
-
+                    real_authors = np.array([author for author in possible_authors if find_authors(author)])
                     if real_authors.size:
                         names = add_nodes(real_authors, names, G)
-
-                    elif len(indices) > 0:
-                        if find_authors(indices):
-                            names = add_node(indices, names, G)
-
+                    elif len(formula_substring) > 0:
+                        if find_authors(formula_substring):
+                            names = add_node(formula_substring, names, G)
         if len(names) > 1:
             comb = list(combinations(names, 2))
             for i in range(len(comb)):
-                if not G.has_edge(comb[i][0], comb[i][1]) and not G.has_edge(comb[i][1], comb[i][0]) and comb[i][0] != \
-                        comb[i][1]:
+                if not G.has_edge(comb[i][0], comb[i][1]) and not G.has_edge(comb[i][1], comb[i][0]) and comb[i][0] != comb[i][1]:
                     G.add_edge(comb[i][0], comb[i][1])
-
     G.remove_nodes_from(list(nx.isolates(G)))
     return G
 

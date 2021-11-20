@@ -4,3 +4,7 @@ Average execution time random_greedy_mis = 0.00670616333333333 secs
 Average execution time np_random_greedy_mis = 0.024920209999999998 secs
 Average execution time np_random_greedy_boolean_mask_mis = 0.07879650333333332 secs
 Average execution time fast_mis = 0.39285975333333334 secs
+
+Average execution time BK1_mis = 0.015897316666666585 secs
+Average execution time BK2_mis = 0.49103762666666667 secs
+Average execution time BKD_mis = 0.09542247999999999 secs

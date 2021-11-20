@@ -1,6 +1,8 @@
 import numpy as np
 import random
 import networkx as nx
+import operator
+from networkx.algorithms.core import core_number
 
 
 def greedy_maximal_independent_set(G):
@@ -88,60 +90,74 @@ def mis_nx(G):
     return max_independent_set
 
 
+def BK1_mis(G, P, R, X):
+    if len(np.union1d(P, X)) == 0:
+        mis = R
+        return True
+    for v in P:
+        adjacency = np.array(G.adj[v])
+        found = BK1_mis(G, np.intersect1d(P, adjacency), np.union1d(R, v), np.intersect1d(X, adjacency))
+        if found:
+            return True
+        P = np.setdiff1d(P, v)
+        X = np.append(X, v)
+
+
+def BK2_mis(G, P, R, X):
+    if len(np.union1d(P, X)) == 0:
+        mis = R
+        return True
+    union = np.union1d(P, X)
+    # pivot u
+    u = union[np.argmax([len(np.intersect1d(P, G.adj[u])) for u in union])]
+    for v in np.setdiff1d(P, G.adj[u]):
+        adjacency = np.array(G.adj[v])
+        found = BK2_mis(G, np.intersect1d(P, adjacency), np.union1d(R, v), np.intersect1d(X, adjacency))
+        if found:
+            return True
+        P = np.setdiff1d(P, v)
+        X = np.append(X, v)
+
+
+def BKD_mis(G, P, X):
+    # degeneracy ordering
+    deg_order = list(core_number(G).items())
+    for i, v in enumerate(deg_order):
+        adjacency = np.array(G.adj[v[0]])
+        P = np.intersect1d(adjacency, list(map(operator.itemgetter(0), deg_order[i + 1:])))
+        X = np.intersect1d(adjacency, list(map(operator.itemgetter(0), deg_order[0:i])))
+        found = BK2_mis(G, P, v[0], X)
+        if found:
+            return
+
+
 def graphSets(G):
-    # Base Case - Given Graph
-    # has no nodes
+    # Base Case - Given Graph (has no nodes)
     if len(G.nodes) == 0:
         return []
-
-    # Base Case - Given Graph
-    # has 1 node
+    # Base Case - Given Graph (has 1 node)
     if len(G.nodes) == 1:
         return G.nodes
-
     # Select a vertex from the graph
     random_list = list(G.nodes)
     random.shuffle(random_list)
     node = random_list[0]
-
-    # Case 1 - Proceed removing
-    # the selected vertex
-    # from the Maximal Set
+    # Case 1 - Proceed removing the selected vertex from the Maximal Set
     H = G.copy()
-
-    # Delete current vertex
-    # from the Graph
+    # Delete current vertex from the Graph
     H.remove_node(node)
-
-    # Recursive call - Gets
-    # Maximal Set,
-    # assuming current Vertex
-    # not selected
-
+    # Recursive call - Gets Maximal Set, assuming current Vertex not selected
     res1 = graphSets(H)
-
-    # Case 2 - Proceed considering
-    # the selected vertex as part
-    # of the Maximal Set
-
+    # Case 2 - Proceed considering the selected vertex as part of the Maximal Set
     # Loop through its neighbours
     adjacency = np.array(G.adj[node])
     for adj in adjacency:
-
-        # Delete neighbor from
-        # the current subgraph
+        # Delete neighbor from the current subgraph
         if adj in H.nodes:
             H.remove_node(adj)
-
-    # This result set contains VFirst,
-    # and the result of recursive
-    # call assuming neighbors of vFirst
-    # are not selected
     res2 = list(graphSets(H))
     res2.append(node)
-
-    # Our final result is the one
-    # which is bigger, return it
+    # Our final result is the one which is bigger, return it
     if len(res1) > len(res2):
         return res1
     return res2

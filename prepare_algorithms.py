@@ -61,17 +61,21 @@ def prepare_BK2_set(G):
 
 def prepare_BKD(G):
     # G is the complement_graph
+    P = np.empty(shape=0)
+    X = np.empty(shape=0)
     all_mis_BKD = []
     start = time.time()
-    enumerate_MIS.BKD(G, all_mis_BKD)
+    enumerate_MIS.BKD(G, P, X, all_mis_BKD)
     print('Execution time BKD =', time.time() - start, 'secs')
     return all_mis_BKD
 
 
 def prepare_BKD_set(G):
     # G is the complement_graph
+    P = set()
+    X = set()
     all_mis_BKD_set = []
     start = time.time()
-    enumerate_MIS.BKD_set(G, all_mis_BKD_set)
+    enumerate_MIS.BKD_set(G, P, X, all_mis_BKD_set)
     print('Execution time BKD_set =', time.time() - start, 'secs')
     return all_mis_BKD_set
